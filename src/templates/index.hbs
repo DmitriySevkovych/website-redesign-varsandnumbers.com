@@ -1,17 +1,17 @@
 {{#extend "layout"}}
 
-  {{#content "head" mode="append"}}
-    <link rel="stylesheet" href="assets/css/home.css" />
-  {{/content}}
+    {{#content "head" mode="append"}}
+        <link rel="stylesheet" href="css/index.css" />
+    {{/content}}
 
-  {{#content "body"}}
-    <h2>Welcome Home</h2>
+    {{#content "body"}}
+        <h2>Welcome Home</h2>
 
-    <ul>
-      {{#items}}
-      <li>{{.}}</li>
-      {{/items}}
-    </ul>
-  {{/content}}
+        <ul>
+            {{#items}}
+            <li>{{.}}</li>
+            {{/items}}
+        </ul>
+    {{/content}}
 
 {{/extend}}

@@ -1,38 +1,38 @@
 {
-  "name": "varsandnumbers.com",
-  "private": true,
-  "version": "0.0.1",
-  "scripts": {
-    "start": "webpack-dev-server --open",
-    "compile": "webpack --watch",
-    "build": "webpack --config webpack.prod.js",
-    "precommit": "lint-staged",
-    "lint": "eslint --ignore-pattern 'src/js/lib/' --cache --format=node_modules/eslint-formatter-pretty src/js/",
-    "lint-fix": "npm run lint -- --fix"
-  },
-  "lint-staged": {
-    "src/templates/**/*.html": [
-      "htmlhint --config .htmlhintrc"
-    ]
-  },
-  "authors": "Vars&Numbers",
-  "devDependencies": {
-    "@babel/cli": "^7.11.6",
-    "@babel/core": "^7.11.6",
-    "@babel/preset-env": "^7.11.5",
-    "autoprefixer": "^10.1.0",
-    "babel-loader": "^8.2.2",
-    "css-loader": "^5.0.1",
-    "handlebars-layouts": "^3.1.4",
-    "handlebars-webpack-plugin": "^2.2.1",
-    "html-webpack-plugin": "^4.4.1",
-    "postcss-normalize": "^9.0.0",
-    "sass": "^1.32.0",
-    "sass-loader": "^10.1.0",
-    "style-loader": "^2.0.0",
-    "webpack": "^5.11.1",
-    "webpack-cli": "^4.3.0",
-    "webpack-dev-server": "^3.11.1"
-  },
-  "dependencies": {}
+    "name": "varsandnumbers.com",
+    "private": true,
+    "version": "0.0.1",
+    "scripts": {
+        "start": "webpack-dev-server --open",
+        "compile": "webpack --watch",
+        "build": "webpack --config webpack.prod.js",
+        "precommit": "lint-staged",
+        "lint": "eslint --ignore-pattern 'src/js/lib/' --cache --format=node_modules/eslint-formatter-pretty src/js/",
+        "lint-fix": "npm run lint -- --fix"
+    },
+    "lint-staged": {
+        "src/templates/**/*.html": [
+            "htmlhint --config .htmlhintrc"
+        ]
+    },
+    "authors": "Vars&Numbers",
+    "devDependencies": {
+        "@babel/cli": "^7.11.6",
+        "@babel/core": "^7.11.6",
+        "@babel/preset-env": "^7.11.5",
+        "autoprefixer": "^10.1.0",
+        "babel-loader": "^8.2.2",
+        "css-loader": "^5.0.1",
+        "handlebars-layouts": "^3.1.4",
+        "handlebars-loader": "^1.7.1",
+        "html-webpack-plugin": "^4.4.1",
+        "postcss-normalize": "^9.0.0",
+        "sass": "^1.32.0",
+        "sass-loader": "^10.1.0",
+        "style-loader": "^2.0.0",
+        "webpack": "^5.11.1",
+        "webpack-cli": "^4.3.0",
+        "webpack-dev-server": "^3.11.1"
+    },
+    "dependencies": {}
 }
