@@ -57,19 +57,24 @@ module.exports = {
             // Images
             {
                 test: /\.(png|jpg|jpeg|gif)$/i,
-                type: 'asset/resource',
+                type: 'asset/resource', // Webpack 5.x: loads file into output folter (file-loader)
+            },
+            {
+                test: /\.(svg)$/i,
+                type: 'asset/source', // Webpack 5.x: loads file content into bundled JS file (raw-loader)
             },
             // Fonts
             {
                 test: /\.(woff|woff2|eot|ttf|otf)$/i,
-                type: 'asset/resource',
+                type: 'asset/resource', // Webpack 5.x: loads file into output folter (file-loader)
             },
-            // Files
+            // GLSL
             {
-                test: /\.(glsl|frag|vert|svg)$/i,
-                type: 'asset/source',
+                test: /\.(glsl|vs|fs|vert|frag)$/i,
+                type: 'asset/source', // Webpack 5.x: loads file content into bundled JS file (raw-loader)
                 exclude: /node_modules/
-            }
+            },
+            { test: /\.(glsl|vs|fs|vert|frag)$/i, loader: 'glslify-loader', exclude: /node_modules/ }
         ]
     },
     plugins: [

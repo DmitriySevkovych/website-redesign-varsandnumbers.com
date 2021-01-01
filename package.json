@@ -22,6 +22,8 @@
         "eslint-formatter-pretty": "^4.0.0",
         "eslint-loader": "^4.0.2",
         "eslint-plugin-dollar-sign": "^1.0.2",
+        "glslify": "^7.1.1",
+        "glslify-loader": "^2.0.0",
         "handlebars": "^4.7.6",
         "handlebars-layouts": "^3.1.4",
         "handlebars-loader": "^1.7.1",
