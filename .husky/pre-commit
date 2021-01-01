@@ -1,5 +1,14 @@
 #!/bin/sh
 . "$(dirname $0)/_/husky.sh"
 echo "HUSKY PRE-COMMIT HOOK STARTING"
-npm run precommit
+
+# HTML: Handlebars sanity check using htmlhint
+npx htmlhint **/*.hbs
+
+# JS: sanity check using eslint
+npx eslint --ignore-pattern 'src/js/extlib/' --format=node_modules/eslint-formatter-pretty 'src/js/'
+
+# CSS: SASS sanity check using what?
+# TODO
+
 echo "HUSKY PRE-COMMIT HOOK DONE"

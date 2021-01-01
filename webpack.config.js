@@ -32,9 +32,9 @@ module.exports = {
             // JS
             {
                 test: /\.(js|jsx)$/,
-                exclude: /node_modules/,
-                loader: 'babel-loader',
-                options: { presets: ['@babel/env'] }
+                exclude: [/node_modules/, /extlib/],
+                use: ['babel-loader', 'eslint-loader'],
+                // options: { presets: ['@babel/env'] }
             },
             // SASS, CSS
             {
