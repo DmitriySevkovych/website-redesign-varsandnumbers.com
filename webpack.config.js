@@ -21,8 +21,11 @@ module.exports = {
                         loader: 'handlebars-loader',
                         options: {
                             // Path to your custom js file, which has Handlebars with custom helpers registered
-                            runtime: path.join(__dirname, 'handlebars.config.js')
-                        }
+                            runtime: path.join(__dirname, 'handlebars.config.js'),
+                            precompileOptions: {
+                                knownHelpersOnly: false,
+                            }
+                        },
                     }
                 ]
             },

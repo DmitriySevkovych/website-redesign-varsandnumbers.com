@@ -9,7 +9,6 @@ handlebars.registerHelper(layouts(handlebars));
 // Register partials
 handlebars.registerPartial('layout', fs.readFileSync('src/templates/layouts/layout.hbs', 'utf8'));
 
-
 /**
  * Handlebars runtime with custom helpers.
  * Used by handlebars-loader.
