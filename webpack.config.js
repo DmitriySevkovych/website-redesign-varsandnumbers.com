@@ -1,5 +1,8 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+// This plugin is an alternative to the style-loader, which seems to be better suited for static webpages
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+// This plugin empties the output directory before building
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
@@ -52,7 +55,7 @@ module.exports = {
             // SASS, CSS
             {
                 test: /\.(css|s[ac]ss)$/i,
-                use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
+                use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader']
             },
             // Images
             {
@@ -79,6 +82,7 @@ module.exports = {
     },
     plugins: [
         new CleanWebpackPlugin(),
+        new MiniCssExtractPlugin(),
         new HtmlWebpackPlugin({
             template: 'src/templates/index.hbs'
         })

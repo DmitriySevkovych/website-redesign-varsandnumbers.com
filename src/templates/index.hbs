@@ -1,14 +1,15 @@
 {{#extend "layout"}}
 
-  {{#content "head" mode="append"}}
-    <link rel="stylesheet" href="css/index.css" />
-  {{/content}}
+    {{!-- Note the append mode: can be handy to add stuff at the END of the layout-head block --}}
+    {{#content "head" mode="append"}}
 
-  {{#content "body"}}
-    {{> components/header }}
-  {{/content}}
+    {{/content}}
 
+    {{#content "body"}}
+        {{> components/header }}
+    {{/content}}
 
+    {{!-- Note the prepend mode: can be handy to add stuff at the BEGINNING of the layout-foot block --}}
     {{#content "foot" mode="prepend"}}
         {{!-- <script src="js/extlib/analytics.js"></script> --}}
     {{/content}}
