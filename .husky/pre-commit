@@ -1,5 +1,5 @@
 #!/bin/sh
-#. "$(dirname $0)/_/husky.sh"
+. "$(dirname $0)/_/husky.sh"
 echo "HUSKY PRE-COMMIT HOOK STARTING"
 npm run precommit
 echo "HUSKY PRE-COMMIT HOOK DONE"
