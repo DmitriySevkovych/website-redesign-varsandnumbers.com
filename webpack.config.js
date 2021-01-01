@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
     mode: 'development',
@@ -8,8 +9,20 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
-        publicPath: '/dist',
-        filename: 'js/[name].bundle.js'
+        // publicPath: '/dist',
+        filename: 'js/[name].bundle.js',
+        assetModuleFilename: 'static/[hash][ext][query]'
+    },
+    devServer: {
+        port: 3000,
+        // host: '0.0.0.0',
+        // contentBase: path.join(__dirname, 'dist/'),
+        // publicPath: 'dist/',
+        // compress: true,
+        // https: true,
+        // key: fs.readFileSync('/path/to/server.key'),
+        // cert: fs.readFileSync('/path/to/server.crt'),
+        // ca: fs.readFileSync('/path/to/ca.pem'),
     },
     module: {
         rules: [
@@ -40,13 +53,27 @@ module.exports = {
             {
                 test: /\.(css|s[ac]ss)$/i,
                 use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
-            }
+            },
             // Images
+            {
+                test: /\.(png|jpg|jpeg|gif)$/i,
+                type: 'asset/resource',
+            },
             // Fonts
+            {
+                test: /\.(woff|woff2|eot|ttf|otf)$/i,
+                type: 'asset/resource',
+            },
             // Files
+            {
+                test: /\.(glsl|frag|vert|svg)$/i,
+                type: 'asset/source',
+                exclude: /node_modules/
+            }
         ]
     },
     plugins: [
+        new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
             template: 'src/templates/index.hbs'
         })

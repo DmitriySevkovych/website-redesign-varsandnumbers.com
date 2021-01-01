@@ -3,7 +3,7 @@
     "private": true,
     "version": "0.0.1",
     "scripts": {
-        "start": "webpack-dev-server --open",
+        "start": "webpack serve",
         "compile": "webpack --watch",
         "build": "webpack --config webpack.prod.js",
         "lint": "eslint --ignore-pattern 'src/js/extlib/' --format=node_modules/eslint-formatter-pretty --cache src/js/",
@@ -16,6 +16,7 @@
         "@babel/preset-env": "^7.11.5",
         "autoprefixer": "^10.1.0",
         "babel-loader": "^8.2.2",
+        "clean-webpack-plugin": "^3.0.0",
         "css-loader": "^5.0.1",
         "eslint": "^7.16.0",
         "eslint-formatter-pretty": "^4.0.0",
