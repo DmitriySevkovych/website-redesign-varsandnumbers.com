@@ -1,7 +1,8 @@
 ## TODO
 
 - [x] Configure eslint
-- [ ] Configure sass-lint
+- [ ] Configure stylelint
+- [ ] postcss vs sass
 - [x] Configure npm scripts
 - [x] Add font and image Webpack loaders
 - [x] Add glsl and glslify Webpack loaders

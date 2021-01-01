@@ -6,7 +6,6 @@
         "start": "webpack serve",
         "compile": "webpack --watch",
         "build": "webpack --config webpack.prod.js",
-        "lint": "eslint --ignore-pattern 'src/js/extlib/' --format=node_modules/eslint-formatter-pretty --cache src/js/",
         "postinstall": "husky install"
     },
     "authors": "Vars&Numbers",
@@ -36,6 +35,8 @@
         "sass": "^1.32.0",
         "sass-loader": "^10.1.0",
         "style-loader": "^2.0.0",
+        "stylelint": "^13.8.0",
+        "stylelint-config-sass-guidelines": "^7.1.0",
         "webpack": "^5.11.1",
         "webpack-cli": "^4.3.0",
         "webpack-dev-server": "^3.11.1"

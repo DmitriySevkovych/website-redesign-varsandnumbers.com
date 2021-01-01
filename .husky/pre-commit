@@ -12,7 +12,9 @@ echo "JS: sanity check using eslint"
 npx eslint --ignore-pattern 'src/js/extlib/' --format=node_modules/eslint-formatter-pretty 'src/js/'
 echo "JS check ok"
 
-# CSS: SASS sanity check using what?
-# TODO
+# CSS: sanity check using stylelint
+# echo "CSS: sanity check using stylelint"
+# npx stylelint "**/*.?[a,c]ss"
+# echo "CSS check ok"
 
 echo "HUSKY PRE-COMMIT HOOK DONE"
