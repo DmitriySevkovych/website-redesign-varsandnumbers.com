@@ -6,14 +6,10 @@
         "start": "webpack-dev-server --open",
         "compile": "webpack --watch",
         "build": "webpack --config webpack.prod.js",
-        "precommit": "lint-staged",
+        "precommit": "htmlhint **/*.hbs",
         "lint": "eslint --ignore-pattern 'src/js/lib/' --cache --format=node_modules/eslint-formatter-pretty src/js/",
-        "lint-fix": "npm run lint -- --fix"
-    },
-    "lint-staged": {
-        "src/templates/**/*.html": [
-            "htmlhint --config .htmlhintrc"
-        ]
+        "lint-fix": "npm run lint -- --fix",
+        "postinstall": "husky install"
     },
     "authors": "Vars&Numbers",
     "devDependencies": {
@@ -28,6 +24,8 @@
         "handlebars-layouts": "^3.1.4",
         "handlebars-loader": "^1.7.1",
         "html-webpack-plugin": "^5.0.0-alpha.6",
+        "htmlhint": "^0.14.2",
+        "husky": "^5.0.6",
         "postcss-normalize": "^9.0.0",
         "sass": "^1.32.0",
         "sass-loader": "^10.1.0",
