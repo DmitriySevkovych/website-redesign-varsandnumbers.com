@@ -3,10 +3,14 @@
 echo "HUSKY PRE-COMMIT HOOK STARTING"
 
 # HTML: Handlebars sanity check using htmlhint
+echo "HTML: Handlebars sanity check using htmlhint"
 npx htmlhint **/*.hbs
+echo "HTML check ok"
 
 # JS: sanity check using eslint
+echo "JS: sanity check using eslint"
 npx eslint --ignore-pattern 'src/js/extlib/' --format=node_modules/eslint-formatter-pretty 'src/js/'
+echo "JS check ok"
 
 # CSS: SASS sanity check using what?
 # TODO
