@@ -1,8 +1,8 @@
 ## TODO
 
-- [ ] Configure eslint
+- [x] Configure eslint
 - [ ] Configure sass-lint
-- [ ] Configure npm scripts
+- [x] Configure npm scripts
 - [ ] Add font and image Webpack loaders
 - [x] Configure precommit checks (husky?)
 - [ ] Think of how to add sass to project
