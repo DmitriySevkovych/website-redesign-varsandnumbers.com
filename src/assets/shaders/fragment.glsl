@@ -106,17 +106,24 @@ void main(){
 
     // Colouring
     // Background
-    vec3 colour=mix(vec3(.2),vec3(0.),length(vUv-vec2(.5)));
-
-    // Check what sdfId the raymarchResult returns, e.g. raymarchResult.y>.5 means that we hit id 0
-    if(raymarchResult.y>1.5){
-        vec3 normal=calcNormal(rayDirection*raymarchResult.x+cameraPosition,uTime);
-        colour=vec3(1.,1.,0.);
-    }else if(raymarchResult.y>.5){
-        vec3 normal=calcNormal(rayDirection*raymarchResult.x+cameraPosition,uTime);
-        colour=vec3(dot(vec3(1.),normal));
+    vec3 bgColour=mix(vec3(.2),vec3(0.),length(vUv-vec2(.5)));
+    if(raymarchResult.y < 0.) {
+        gl_FragColor=vec4(bgColour,1.);
+        return;
     }
 
+    vec3 normal=calcNormal(rayDirection*raymarchResult.x+cameraPosition,uTime);
+    vec3 colour=vec3(dot(vec3(1.),normal)); 
+    float fresnel = pow(1. + dot(rayDirection,normal), 3.);
+    colour = mix(colour,bgColour,fresnel);
+
+    // Check what sdfId the raymarchResult returns, e.g. raymarchResult.y>.5 means that we hit id 0
+    // if(raymarchResult.y>1.5){
+    //     colour=vec3(dot(vec3(1.),normal));
+    // }else if(raymarchResult.y>.5){
+    //     colour=vec3(dot(vec3(1.),normal));
+    // }
+
     // Results
-    gl_FragColor=vec4(colour,1.);
+    gl_FragColor=vec4(colour,1. / raymarchResult.y);
 }

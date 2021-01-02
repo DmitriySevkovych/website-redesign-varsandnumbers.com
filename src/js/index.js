@@ -25,7 +25,8 @@ function init() {
 
     scene = new THREE.Scene();
 
-    renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    // renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    renderer = new THREE.WebGLRenderer();
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(w, h);
 
