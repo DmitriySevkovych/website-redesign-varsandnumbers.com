@@ -9,6 +9,7 @@ import vertex from '../assets/shaders/vertex.glsl';
  * Declarations
  */
 // Constants
+const frustumSize = 1;
 
 // Variables
 let camera; let scene; let renderer; let rootContainer; let material;
@@ -18,8 +19,8 @@ let time = 0;
 function init() {
     /* Setup THREE boilerplate */
     rootContainer = document.querySelector('.root');
-    const w = rootContainer.offsetWidth;
-    const h = rootContainer.offsetHeight;
+
+    const { w, h, resolution } = getProportions();
 
     scene = new THREE.Scene();
 
@@ -29,12 +30,8 @@ function init() {
 
     rootContainer.appendChild(renderer.domElement);
 
-    camera = new THREE.PerspectiveCamera(
-        70,
-        w / h,
-        0.001, 100
-    );
-    camera.position.set(1.5, 0, 2);
+    camera = new THREE.OrthographicCamera(frustumSize / - 2, frustumSize / 2, frustumSize / 2, frustumSize / - 2, -1000, 1000);
+    camera.position.set(0, 0, 2);
 
     // new OrbitControls(camera, renderer.domElement);
 
@@ -43,12 +40,13 @@ function init() {
         side: THREE.DoubleSide,
         uniforms: {
             time: { value: 0 },
+            resolution: { value: resolution }
         },
         vertexShader: vertex,
         fragmentShader: fragment,
     });
 
-    const planeGeometry = new THREE.PlaneBufferGeometry(w, h, 1, 1)
+    const planeGeometry = new THREE.PlaneBufferGeometry(1, 1, 1, 1);
     const plane = new THREE.Mesh(planeGeometry, material);
     scene.add(plane);
 
@@ -71,9 +69,20 @@ function render() {
 /*
  * Helper functions and event listeners
  */
-function resize() {
+function getProportions() {
     const w = rootContainer.offsetWidth;
     const h = rootContainer.offsetHeight;
+    const a1 = (h > w) ? (w / h) : 1;
+    const a2 = (h > w) ? 1 : (h / w);
+    const resolution = new THREE.Vector2(a1, a2);
+
+    return { w, h, resolution };
+}
+
+function resize() {
+    const { w, h, resolution } = getProportions();
+
+    material.uniforms.resolution.value = resolution;
     renderer.setSize(w, h);
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
