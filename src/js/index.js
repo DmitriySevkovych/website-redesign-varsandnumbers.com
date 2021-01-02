@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-// let OrbitControls = require('three-orbit-controls')(THREE);
 
 import '../sass/index.sass';
 import fragment from '../assets/shaders/fragment.glsl';
@@ -33,14 +32,15 @@ function init() {
     camera = new THREE.OrthographicCamera(frustumSize / - 2, frustumSize / 2, frustumSize / 2, frustumSize / - 2, -1000, 1000);
     camera.position.set(0, 0, 2);
 
-    // new OrbitControls(camera, renderer.domElement);
-
     /* Start custom stuff */
     material = new THREE.ShaderMaterial({
+        extensions: {
+            derivatives: '#extension GL_OES_standard_derivatives : enable'
+        },
         side: THREE.DoubleSide,
         uniforms: {
-            time: { value: 0 },
-            resolution: { value: resolution }
+            uTime: { value: 0 },
+            uResolution: { value: resolution }
         },
         vertexShader: vertex,
         fragmentShader: fragment,
@@ -56,7 +56,7 @@ function init() {
 
 function animate() {
     time += 0.05;
-    material.uniforms.time.value = time;
+    material.uniforms.uTime.value = time;
 
     requestAnimationFrame(animate);
     render();
@@ -82,7 +82,7 @@ function getProportions() {
 function resize() {
     const { w, h, resolution } = getProportions();
 
-    material.uniforms.resolution.value = resolution;
+    material.uniforms.uResolution.value = resolution;
     renderer.setSize(w, h);
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
