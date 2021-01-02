@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import * as dat from 'dat.gui';
+import gsap from 'gsap';
 
 import '../sass/index.sass';
 import fragment from '../assets/shaders/fragment.glsl';
@@ -44,7 +45,9 @@ function init() {
         uniforms: {
             uTime: { value: 0 },
             uResolution: { value: resolution },
-            uSminK: { value: settings.smin_k }
+            uSminK: { value: settings.smin_k },
+            uStickAnimation: {value: 0},
+            uSphereAnimation: {value: 0}
         },
         vertexShader: vertex,
         fragmentShader: fragment,
@@ -53,6 +56,21 @@ function init() {
     const planeGeometry = new THREE.PlaneBufferGeometry(1, 1, 1, 1);
     const plane = new THREE.Mesh(planeGeometry, material);
     scene.add(plane);
+
+    // Temporary gsap animation
+    const tl = gsap.timeline();
+    tl.to(material.uniforms.uStickAnimation,
+        {
+            value:1,
+            duration: 1,
+            ease: 'power1.in' 
+        })
+        .to(material.uniforms.uSphereAnimation,
+            {
+                value:1,
+                duration: 3,
+                ease: 'power1.out' 
+            });
 
     resize();
     window.addEventListener('resize', resize);
@@ -97,7 +115,7 @@ function initDatGui() {
     const gui = new dat.GUI();
 
     const settings = {
-        smin_k: 2
+        smin_k: 2,
     }
     gui.add(settings, 'smin_k', 0, 2, 0.005);
 

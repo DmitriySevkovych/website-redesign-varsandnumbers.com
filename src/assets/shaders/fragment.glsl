@@ -8,6 +8,8 @@ const float RM_MAX_DISTANCE=50.;
 
 uniform float uTime;
 uniform float uSminK;
+uniform float uStickAnimation;
+uniform float uSphereAnimation;
 uniform vec2 uResolution;
 varying vec2 vUv;
 
@@ -55,13 +57,14 @@ vec2 map(vec3 point,float time){
 
     // first sphere
     float sphereRadius = 1.;
-    float distSphere = sdSphere(point,sphereRadius);
+    vec3 animationOffset = vec3(sin(2.*PI*uSphereAnimation),0.,0.);
+    float distSphere = sdSphere(point-animationOffset,sphereRadius);
     distScene = distSphere;
     sdfId = 1.;
 
     // first stick
     vec3 stickStart = vec3(-5.,0.,0.);
-    vec3 stickEnd = vec3(0.,0.,-sphereRadius);
+    vec3 stickEnd = vec3(-5.*(1.-uStickAnimation),0.,0.);
     float distStick = sdStick(point,stickStart, stickEnd, 0.01,0.05).x;
     sdfId = distStick < distScene ? 2. : sdfId;
     distScene = smin(distScene, distStick, uSminK);
