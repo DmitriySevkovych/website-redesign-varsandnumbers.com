@@ -3,8 +3,8 @@
 // #define RM_MAX_DISTANCE 5.;
 
 const float PI=3.141592653589793238;
-const float RM_ACCURACY=.0001;
-const float RM_MAX_DISTANCE=5.;
+const float RM_ACCURACY=.001;
+const float RM_MAX_DISTANCE=50.;
 
 uniform float uTime;
 uniform float uSminK;
@@ -54,15 +54,15 @@ vec2 map(vec3 point,float time){
     float sdfId=-1.;
 
     // first sphere
-    float sphereRadius = 0.15;
+    float sphereRadius = 1.;
     float distSphere = sdSphere(point,sphereRadius);
     distScene = distSphere;
     sdfId = 1.;
 
     // first stick
-    vec3 stickStart = vec3(-1.,0.,0.);
+    vec3 stickStart = vec3(-5.,0.,0.);
     vec3 stickEnd = vec3(0.,0.,-sphereRadius);
-    float distStick = sdStick(point,stickStart, stickEnd, 0.001,0.001).x;
+    float distStick = sdStick(point,stickStart, stickEnd, 0.01,0.05).x;
     sdfId = distStick < distScene ? 2. : sdfId;
     distScene = smin(distScene, distStick, uSminK);
 
@@ -100,7 +100,7 @@ void main(){
     // Raymarching
     // UV of display grid
     vec2 displayUV=(vUv-vec2(.5))*uResolution;
-    vec3 cameraPosition=vec3(0.,0.,2.);
+    vec3 cameraPosition=vec3(0.,0.,10.);
     vec3 rayDirection=normalize(vec3(displayUV,-1.));
     vec2 raymarchResult=castRay(cameraPosition,rayDirection,uTime);
 

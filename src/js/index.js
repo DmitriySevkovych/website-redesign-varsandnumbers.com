@@ -96,9 +96,9 @@ function initDatGui() {
     const gui = new dat.GUI();
 
     const settings = {
-        smin_k: 0.2
+        smin_k: 2
     }
-    gui.add(settings, 'smin_k', 0, 0.2, 0.005);
+    gui.add(settings, 'smin_k', 0, 2, 0.005);
 
     return { gui, settings };
 }
