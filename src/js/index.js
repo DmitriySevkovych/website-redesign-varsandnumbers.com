@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import * as dat from 'dat.gui';
 
 import '../sass/index.sass';
 import fragment from '../assets/shaders/fragment.glsl';
@@ -9,6 +10,7 @@ import vertex from '../assets/shaders/vertex.glsl';
  */
 // Constants
 const frustumSize = 1;
+const { settings } = initDatGui();
 
 // Variables
 let camera; let scene; let renderer; let rootContainer; let material;
@@ -40,7 +42,8 @@ function init() {
         side: THREE.DoubleSide,
         uniforms: {
             uTime: { value: 0 },
-            uResolution: { value: resolution }
+            uResolution: { value: resolution },
+            uSminK: { value: settings.smin_k }
         },
         vertexShader: vertex,
         fragmentShader: fragment,
@@ -57,6 +60,7 @@ function init() {
 function animate() {
     time += 0.05;
     material.uniforms.uTime.value = time;
+    material.uniforms.uSminK.value = settings.smin_k;
 
     requestAnimationFrame(animate);
     render();
@@ -88,6 +92,16 @@ function resize() {
     camera.updateProjectionMatrix();
 }
 
+function initDatGui() {
+    const gui = new dat.GUI();
+
+    const settings = {
+        smin_k: 0.2
+    }
+    gui.add(settings, 'smin_k', 0, 0.2, 0.005);
+
+    return { gui, settings };
+}
 
 /*
  * Calls

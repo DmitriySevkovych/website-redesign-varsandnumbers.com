@@ -7,6 +7,7 @@ const float RM_ACCURACY=.0001;
 const float RM_MAX_DISTANCE=5.;
 
 uniform float uTime;
+uniform float uSminK;
 uniform vec2 uResolution;
 varying vec2 vUv;
 
@@ -53,7 +54,7 @@ vec2 map(vec3 point,float time){
     float sdfId=-1.;
 
     // first sphere
-    float sphereRadius = 0.05;
+    float sphereRadius = 0.15;
     float distSphere = sdSphere(point,sphereRadius);
     distScene = distSphere;
     sdfId = 1.;
@@ -61,9 +62,9 @@ vec2 map(vec3 point,float time){
     // first stick
     vec3 stickStart = vec3(-1.,0.,0.);
     vec3 stickEnd = vec3(0.,0.,-sphereRadius);
-    float distStick = sdStick(point,stickStart, stickEnd, 0.001,0.02).x;
+    float distStick = sdStick(point,stickStart, stickEnd, 0.001,0.001).x;
     sdfId = distStick < distScene ? 2. : sdfId;
-    distScene = smin(distScene, distStick, 0.3);
+    distScene = smin(distScene, distStick, uSminK);
 
     return vec2(distScene,sdfId);
 }
