@@ -3,6 +3,7 @@
 // #define RM_MAX_DISTANCE 5.;
 
 const float PI=3.141592653589793238;
+const float TAU=2.*PI;
 const float RM_ACCURACY=.0001;
 const float RM_MAX_DISTANCE=50.;
 
@@ -58,16 +59,13 @@ vec2 map(vec3 point,float time){
     // first sphere
     float sphereRadius = 1.;
     vec3 shiftOnImpact = vec3(-1.,0.,0.) * 4.*uSphereAnimation*(1.-uSphereAnimation);
-    vec3 q = point + shiftOnImpact;
-    float distSphere = sdSphere(q,sphereRadius);
-    float impact = q.x+sphereRadius-uSphereAnimation;
-    float impactArea = smoothstep(-1.,0.,impact)*smoothstep(2.,0.,impact);
-    distSphere += 0.02*sin(2.7*2.* PI*(q.x+0.5*sin(point.y)-time/4.)) //displacement
-                    // *smoothstep(
-                    //     sphereRadius*(0.5 + 1.5*uSphereAnimation),
-                    //     uSphereAnimation,
-                    //     impact) //impact area
-                    * impactArea * 4.*uSphereAnimation*(0.9-clamp(uSphereAnimation,0.,0.9));
+    vec3 spherePoint = point + shiftOnImpact;
+    float distSphere = sdSphere(spherePoint,sphereRadius);
+    float impactPoint = spherePoint.x+sphereRadius-uSphereAnimation;
+    float impactArea = smoothstep(-1.,0.,impactPoint)*smoothstep(2.,0.,impactPoint);
+    float impact = 0.02*sin(2.7*TAU*(impactPoint+0.5*sin(spherePoint.y)-time/4.));
+    distSphere += impact * impactArea
+                  * 4.*uSphereAnimation*(0.9-clamp(uSphereAnimation,0.,0.9));
     distScene = distSphere;
     sdfId = 1.;
 
