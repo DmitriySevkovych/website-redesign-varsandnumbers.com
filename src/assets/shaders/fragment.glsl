@@ -3,7 +3,7 @@
 // #define RM_MAX_DISTANCE 5.;
 
 const float PI=3.141592653589793238;
-const float RM_ACCURACY=.001;
+const float RM_ACCURACY=.0001;
 const float RM_MAX_DISTANCE=50.;
 
 uniform float uTime;
@@ -57,8 +57,15 @@ vec2 map(vec3 point,float time){
 
     // first sphere
     float sphereRadius = 1.;
-    vec3 animationOffset = vec3(sin(2.*PI*uSphereAnimation),0.,0.);
-    float distSphere = sdSphere(point-animationOffset,sphereRadius);
+    // vec3 animationOffset = vec3(sin(2.*PI*uSphereAnimation),0.,0.);
+    float distSphere = sdSphere(point,sphereRadius);
+    float impact = point.x+sphereRadius;
+    distSphere += 0.02*sin(2.7*2.* PI*(point.x+0.5*sin(point.y)-time/4.)) //displacement
+                    *smoothstep(
+                        sphereRadius*(0.5 + 1.5*uSphereAnimation),
+                        uSphereAnimation,
+                        impact) //impact area
+                    *4.*uSphereAnimation*(1.-uSphereAnimation); //duration
     distScene = distSphere;
     sdfId = 1.;
 
@@ -110,23 +117,23 @@ void main(){
     // Colouring
     // Background
     vec3 bgColour=mix(vec3(.2),vec3(0.),length(vUv-vec2(.5)));
-    if(raymarchResult.y < 0.) {
+    if(raymarchResult.y<0.){
         gl_FragColor=vec4(bgColour,1.);
         return;
     }
 
     vec3 normal=calcNormal(rayDirection*raymarchResult.x+cameraPosition,uTime);
-    vec3 colour=vec3(dot(vec3(1.),normal)); 
-    float fresnel = pow(1. + dot(rayDirection,normal), 3.);
-    colour = mix(colour,bgColour,fresnel);
+    vec3 colour=vec3(dot(vec3(1.),normal));
+    float fresnel=pow(1.+dot(rayDirection,normal),3.);
+    colour=mix(colour,bgColour,fresnel);
 
     // Check what sdfId the raymarchResult returns, e.g. raymarchResult.y>.5 means that we hit id 0
     // if(raymarchResult.y>1.5){
-    //     colour=vec3(dot(vec3(1.),normal));
+        //     colour=vec3(dot(vec3(1.),normal));
     // }else if(raymarchResult.y>.5){
-    //     colour=vec3(dot(vec3(1.),normal));
+        //     colour=vec3(dot(vec3(1.),normal));
     // }
 
     // Results
-    gl_FragColor=vec4(colour,1. / raymarchResult.y);
+    gl_FragColor=vec4(colour,1./raymarchResult.y);
 }

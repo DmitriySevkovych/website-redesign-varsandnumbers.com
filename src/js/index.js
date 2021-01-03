@@ -63,13 +63,13 @@ function init() {
         {
             value:1,
             duration: 1,
-            ease: 'power1.in' 
+            ease: 'power1.in'
         })
         .to(material.uniforms.uSphereAnimation,
             {
                 value:1,
-                duration: 3,
-                ease: 'power1.out' 
+                duration: 4,
+                ease: 'power4.out'
             });
 
     resize();
