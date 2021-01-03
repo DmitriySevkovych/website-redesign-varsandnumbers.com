@@ -57,14 +57,15 @@ vec2 map(vec3 point,float time){
 
     // first sphere
     float sphereRadius = 1.;
-    // vec3 animationOffset = vec3(sin(2.*PI*uSphereAnimation),0.,0.);
     float distSphere = sdSphere(point,sphereRadius);
-    float impact = point.x+sphereRadius;
+    float impact = point.x+sphereRadius-uSphereAnimation;
+    float impactArea = smoothstep(-1.,0.,impact)*smoothstep(2.,0.,impact);
     distSphere += 0.02*sin(2.7*2.* PI*(point.x+0.5*sin(point.y)-time/4.)) //displacement
-                    *smoothstep(
-                        sphereRadius*(0.5 + 1.5*uSphereAnimation),
-                        uSphereAnimation,
-                        impact) //impact area
+                    // *smoothstep(
+                    //     sphereRadius*(0.5 + 1.5*uSphereAnimation),
+                    //     uSphereAnimation,
+                    //     impact) //impact area
+                    * impactArea
                     *4.*uSphereAnimation*(1.-uSphereAnimation); //duration
     distScene = distSphere;
     sdfId = 1.;
