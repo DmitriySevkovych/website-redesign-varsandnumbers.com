@@ -57,8 +57,8 @@ vec2 map(vec3 point,float time){
     float sdfId=-1.;
 
     // first sphere
-    vec3 direction1= vec3(-1.,1.,0.);
-    vec3 direction2= vec3(1.,0.,0.);
+    vec3 direction1= normalize(vec3(-1.,1.,-1.));
+    vec3 direction2= normalize(vec3(1.,0.,2.));
     {
         float sphereRadius = 1.;
         float animation = fract(uFirstAnimation.y + uSecondAnimation.y);
