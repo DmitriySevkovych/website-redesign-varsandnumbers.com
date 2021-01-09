@@ -9,8 +9,8 @@ const float RM_MAX_DISTANCE=50.;
 
 uniform float uTime;
 uniform float uSminK;
-uniform float uStickAnimation;
-uniform float uSphereAnimation;
+uniform vec2 uFirstAnimation;
+uniform vec2 uSecondAnimation;
 uniform vec2 uResolution;
 varying vec2 vUv;
 
@@ -57,24 +57,41 @@ vec2 map(vec3 point,float time){
     float sdfId=-1.;
 
     // first sphere
-    float sphereRadius = 1.;
-    vec3 shiftOnImpact = vec3(-1.,0.,0.) * 4.*uSphereAnimation*(1.-uSphereAnimation);
-    vec3 spherePoint = point + shiftOnImpact;
-    float distSphere = sdSphere(spherePoint,sphereRadius);
-    float impactPoint = spherePoint.x+sphereRadius-uSphereAnimation;
-    float impactArea = smoothstep(-1.,0.,impactPoint)*smoothstep(2.,0.,impactPoint);
-    float impact = 0.02*sin(2.7*TAU*(impactPoint+0.5*sin(spherePoint.y)-time/4.));
-    distSphere += impact * impactArea
-                  * 4.*uSphereAnimation*(0.9-clamp(uSphereAnimation,0.,0.9));
-    distScene = distSphere;
-    sdfId = 1.;
+    vec3 direction= vec3(-1.,0.,0.);
+    {
+        float sphereRadius = 1.;
+        float animation = uFirstAnimation.y;
+        vec3 shiftOnImpact = direction * 4.*animation*(1.-animation);
+        vec3 spherePoint = point + shiftOnImpact;
+        float distSphere = sdSphere(spherePoint,sphereRadius);
+        float impactPoint = spherePoint.x+sphereRadius-animation;
+        float impactArea = smoothstep(-1.,0.,impactPoint)*smoothstep(2.,0.,impactPoint);
+        float impact = 0.02*sin(2.7*TAU*(impactPoint+0.5*sin(spherePoint.y)-time/4.));
+        distSphere += impact * impactArea
+                    * 4.*animation*(0.9-clamp(animation,0.,0.9));
+        distScene = distSphere;
+        sdfId = 1.;
+    }
 
     // first stick
-    vec3 stickStart = vec3(-5.,0.,0.);
-    vec3 stickEnd = vec3(-5.*(1.-uStickAnimation),0.,0.);
-    float distStick = sdStick(point,stickStart, stickEnd, 0.01,0.05).x;
-    sdfId = distStick < distScene ? 2. : sdfId;
-    distScene = smin(distScene, distStick, uSminK);
+    {
+        float animation = uFirstAnimation.x;
+        vec3 stickStart = 5.*direction;
+        vec3 stickEnd = 5.*(1.-animation)*direction;
+        float distStick = sdStick(point,stickStart, stickEnd, 0.01,0.05).x;
+        sdfId = distStick < distScene ? 2. : sdfId;
+        distScene = smin(distScene, distStick, uSminK);
+    }
+    
+    // second stick
+    {
+        float animation = uSecondAnimation.x;
+        vec3 stickStart = vec3(5.,0.,0.);
+        vec3 stickEnd = vec3(5.*(1.-uSecondAnimation.x),0.,0.);
+        float distStick = sdStick(point,stickStart, stickEnd, 0.01,0.05).x;
+        sdfId = distStick < distScene ? 3. : sdfId;
+        distScene = smin(distScene, distStick, uSminK);
+    }
 
     return vec2(distScene,sdfId);
 }

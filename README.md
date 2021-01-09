@@ -2,4 +2,4 @@
 
 ## TODO
 
-- [ ] Think through scene scale
+- [x] Think through scene scale

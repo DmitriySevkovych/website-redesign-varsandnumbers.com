@@ -46,8 +46,8 @@ function init() {
             uTime: { value: 0 },
             uResolution: { value: resolution },
             uSminK: { value: settings.smin_k },
-            uStickAnimation: {value: 0},
-            uSphereAnimation: {value: 0}
+            uFirstAnimation: {value: new THREE.Vector2()},
+            uSecondAnimation: {value: new THREE.Vector2()}
         },
         vertexShader: vertex,
         fragmentShader: fragment,
@@ -59,18 +59,31 @@ function init() {
 
     // Temporary gsap animation
     const tl = gsap.timeline();
-    tl.to(material.uniforms.uStickAnimation,
+
+    tl.to(material.uniforms.uFirstAnimation.value,
         {
-            value:1,
+            x: 1,
             duration: 1,
             ease: 'power1.in'
         })
-        .to(material.uniforms.uSphereAnimation,
-            {
-                value:1,
-                duration: 4,
-                ease: 'power4.out'
-            });
+        .to(material.uniforms.uFirstAnimation.value,
+        {
+            y:1,
+            duration: 4,
+            ease: 'power4.out'
+        })
+        .to(material.uniforms.uSecondAnimation.value,
+        {
+            x:1,
+            duration: 1,
+            ease: 'power1.in'
+        })
+        .to(material.uniforms.uSecondAnimation.value,
+        {
+            y:1,
+            duration: 4,
+            ease: 'power4.out'
+        });
 
     resize();
     window.addEventListener('resize', resize);
