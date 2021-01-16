@@ -6,7 +6,7 @@ const float PI=3.141592653589793238;
 const float TAU=2.*PI;
 const float RM_ACCURACY=.0001;
 const float RM_MAX_DISTANCE=50.;
-const int NUM_STICKS=2;
+const int NUM_STICKS=5;
 
 uniform float uTime;
 uniform float uSminK;
@@ -15,7 +15,6 @@ uniform vec2 uAnimations[NUM_STICKS];
 
 varying vec2 vUv;
 
-vec3 directions[NUM_STICKS];
 vec2 map(vec3 point,float time);
 
 /*
@@ -36,6 +35,26 @@ float smin( float a, float b, float k )
     return mix( b, a, h ) - k*h*(1.0-h);
 }
 
+float getSphereAnimation(vec2 animations[NUM_STICKS]) {
+    float result = 0.;
+    for(int i = 0; i < NUM_STICKS; i++) {
+        result += animations[i].y;
+    }
+    return result;
+}
+
+vec3 getSphereDirection(vec3 directions[NUM_STICKS], vec2 animations[NUM_STICKS]) {
+    // starting direction
+    vec3 sphereDirection = directions[0] * (1. - step(1.,animations[0].y));
+    // add layers of directions
+    for(int i = 1; i < NUM_STICKS-1; i++) {
+        sphereDirection += directions[i]
+                            * (1. - step(1.,uAnimations[i].y))
+                            * step(1.,uAnimations[i-1].y);
+    }
+    sphereDirection += directions[NUM_STICKS-1] * step(1.,animations[NUM_STICKS-2].y);
+    return sphereDirection;
+}
 /*
 * Helpers, end
 */
@@ -66,18 +85,18 @@ vec2 map(vec3 point,float time){
     float distScene = -1.;
     float sdfId=-1.;
 
-    // first sphere
+    vec3 directions[NUM_STICKS];
     directions[0]= normalize(vec3(-1.,1.,-1.));
     directions[1]= normalize(vec3(1.,0.,2.));
-    // directions[2]= normalize(vec3(-0.2,-2.,3.));
-    // directions[3]= normalize(vec3(-3.,-2.,-3.));
-    // directions[4]= normalize(vec3(2.,5.,0.));
+    directions[2]= normalize(vec3(-0.2,-2.,3.));
+    directions[3]= normalize(vec3(-3.,-2.,-3.));
+    directions[4]= normalize(vec3(2.,5.,0.));
+    // sphere
     {
         float sphereRadius = 0.5;
-        float animation = fract(uAnimations[0].y + uAnimations[1].y);
+        float animation = fract(getSphereAnimation(uAnimations));
         float parabola = 4.*animation*(1.-animation);
-        vec3 direction = directions[0] * (1. - step(1.,uAnimations[0].y))
-                       + directions[1] * step(1.,uAnimations[0].y);
+        vec3 direction = getSphereDirection(directions,uAnimations);
 
         // shift sphere when hit by stick
         vec3 shiftOnImpact = direction * parabola;

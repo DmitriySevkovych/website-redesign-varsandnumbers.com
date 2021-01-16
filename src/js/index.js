@@ -46,9 +46,7 @@ function init() {
             uTime: { value: 0 },
             uResolution: { value: resolution },
             uSminK: { value: settings.smin_k },
-            uAnimations: { value: initAnimationsArray(2) },
-            // uFirstAnimation: {value: new THREE.Vector2()},
-            // uSecondAnimation: {value: new THREE.Vector2()}
+            uAnimations: { value: initAnimationsArray(5) },
         },
         vertexShader: vertex,
         fragmentShader: fragment,
@@ -65,15 +63,15 @@ function init() {
     tl.to(material.uniforms.uAnimations.value, {
         duration: 1,
         x: 1,
-        ease: 'power1.in',
+        ease: 'power4.in',
         stagger: {
-            amount: 1.6,
+            // amount: 2 * material.uniforms.uAnimations.value.length,
+            each: 3.9,
             onComplete: () => {
                 gsap.to(material.uniforms.uAnimations.value[animationsCount], {
-                    duration: 10,
+                    duration: 4,
                     y: 1,
-                    ease: 'power4.out',
-                    overwrite: 'auto'
+                    ease: 'power4.out'
                 });
                 animationsCount += 1;
             }
