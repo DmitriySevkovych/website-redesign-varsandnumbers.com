@@ -46,7 +46,7 @@ function init() {
             uTime: { value: 0 },
             uResolution: { value: resolution },
             uSminK: { value: settings.smin_k },
-            uAnimations: { value: initAnimationsArray(5) },
+            uAnimations: { value: initAnimationsArray(2) },
             // uFirstAnimation: {value: new THREE.Vector2()},
             // uSecondAnimation: {value: new THREE.Vector2()}
         },
@@ -61,30 +61,49 @@ function init() {
     // Temporary gsap animation
     const tl = gsap.timeline();
 
-    tl.to(material.uniforms.uAnimations.value[0],
-        {
-            x: 1,
-            duration: 1,
-            ease: 'power1.in'
-        })
-        .to(material.uniforms.uAnimations.value[0],
-            {
-                y: 1,
-                duration: 4,
-                ease: 'power4.out'
-            })
-        .to(material.uniforms.uAnimations.value[1],
-            {
-                x: 1,
-                duration: 1,
-                ease: 'power1.in'
-            })
-        .to(material.uniforms.uAnimations.value[1],
-            {
-                y: 1,
-                duration: 4,
-                ease: 'power4.out'
-            });
+    let animationsCount = 0;
+    tl.to(material.uniforms.uAnimations.value, {
+        duration: 1,
+        x: 1,
+        ease: 'power1.in',
+        stagger: {
+            amount: 1.6,
+            onComplete: () => {
+                gsap.to(material.uniforms.uAnimations.value[animationsCount], {
+                    duration: 10,
+                    y: 1,
+                    ease: 'power4.out',
+                    overwrite: 'auto'
+                });
+                animationsCount += 1;
+            }
+        }
+    });
+
+    // tl.to(material.uniforms.uAnimations.value[0],
+    //     {
+    //         x: 1,
+    //         duration: 1,
+    //         ease: 'power1.in'
+    //     })
+    //     .to(material.uniforms.uAnimations.value[0],
+    //         {
+    //             y: 1,
+    //             duration: 4,
+    //             ease: 'power4.out'
+    //         })
+    //     .to(material.uniforms.uAnimations.value[1],
+    //         {
+    //             x: 1,
+    //             duration: 1,
+    //             ease: 'power1.in'
+    //         })
+    //     .to(material.uniforms.uAnimations.value[1],
+    //         {
+    //             y: 1,
+    //             duration: 4,
+    //             ease: 'power4.out'
+    //         });
 
     resize();
     window.addEventListener('resize', resize);
