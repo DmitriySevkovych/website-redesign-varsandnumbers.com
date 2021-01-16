@@ -46,8 +46,9 @@ function init() {
             uTime: { value: 0 },
             uResolution: { value: resolution },
             uSminK: { value: settings.smin_k },
-            uFirstAnimation: {value: new THREE.Vector2()},
-            uSecondAnimation: {value: new THREE.Vector2()}
+            uAnimations: { value: initAnimationsArray(5) },
+            // uFirstAnimation: {value: new THREE.Vector2()},
+            // uSecondAnimation: {value: new THREE.Vector2()}
         },
         vertexShader: vertex,
         fragmentShader: fragment,
@@ -60,30 +61,30 @@ function init() {
     // Temporary gsap animation
     const tl = gsap.timeline();
 
-    tl.to(material.uniforms.uFirstAnimation.value,
+    tl.to(material.uniforms.uAnimations.value[0],
         {
             x: 1,
             duration: 1,
             ease: 'power1.in'
         })
-        .to(material.uniforms.uFirstAnimation.value,
-        {
-            y:1,
-            duration: 4,
-            ease: 'power4.out'
-        })
-        .to(material.uniforms.uSecondAnimation.value,
-        {
-            x:1,
-            duration: 1,
-            ease: 'power1.in'
-        })
-        .to(material.uniforms.uSecondAnimation.value,
-        {
-            y:1,
-            duration: 4,
-            ease: 'power4.out'
-        });
+        .to(material.uniforms.uAnimations.value[0],
+            {
+                y: 1,
+                duration: 4,
+                ease: 'power4.out'
+            })
+        .to(material.uniforms.uAnimations.value[1],
+            {
+                x: 1,
+                duration: 1,
+                ease: 'power1.in'
+            })
+        .to(material.uniforms.uAnimations.value[1],
+            {
+                y: 1,
+                duration: 4,
+                ease: 'power4.out'
+            });
 
     resize();
     window.addEventListener('resize', resize);
@@ -133,6 +134,14 @@ function initDatGui() {
     gui.add(settings, 'smin_k', 0, 2, 0.005);
 
     return { gui, settings };
+}
+
+function initAnimationsArray(numberOfAnimations) {
+    const animations = [];
+    for (let i = 0; i < numberOfAnimations; i++) {
+        animations.push(new THREE.Vector2());
+    }
+    return animations;
 }
 
 /*

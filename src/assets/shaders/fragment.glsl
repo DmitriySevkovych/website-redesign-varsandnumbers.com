@@ -6,14 +6,16 @@ const float PI=3.141592653589793238;
 const float TAU=2.*PI;
 const float RM_ACCURACY=.0001;
 const float RM_MAX_DISTANCE=50.;
+const int NUM_STICKS=5;
 
 uniform float uTime;
 uniform float uSminK;
-uniform vec2 uFirstAnimation;
-uniform vec2 uSecondAnimation;
 uniform vec2 uResolution;
+uniform vec2 uAnimations[NUM_STICKS];
+
 varying vec2 vUv;
 
+vec3 directions[NUM_STICKS];
 vec2 map(vec3 point,float time);
 
 /*
@@ -33,6 +35,7 @@ float smin( float a, float b, float k )
     float h = clamp( 0.5+0.5*(b-a)/k, 0.0, 1.0 );
     return mix( b, a, h ) - k*h*(1.0-h);
 }
+
 /*
 * Helpers, end
 */
@@ -51,20 +54,30 @@ vec2 sdStick(vec3 point, vec3 a, vec3 b, float r1, float r2) // approximated
     return vec2( length( pa - ba*h ) - mix(r1,r2,h*h*(3.0-2.0*h)), h );
 }
 
+float sdUnion(vec3 point, vec3 direction, float animation) {
+    vec3 stickStart = 5.*direction;
+    vec3 stickEnd = 5.*(1.-animation)*direction;
+    return sdStick(point,stickStart, stickEnd, 0.01,0.05).x;
+}
+
+
 // Scene definition happens here
 vec2 map(vec3 point,float time){
     float distScene = -1.;
     float sdfId=-1.;
 
     // first sphere
-    vec3 direction1= normalize(vec3(-1.,1.,-1.));
-    vec3 direction2= normalize(vec3(1.,0.,2.));
+    directions[0]= normalize(vec3(-1.,1.,-1.));
+    directions[1]= normalize(vec3(1.,0.,2.));
+    directions[2]= normalize(vec3(-0.2,-2.,3.));
+    directions[3]= normalize(vec3(-3.,-2.,-3.));
+    directions[4]= normalize(vec3(2.,5.,0.));
     {
         float sphereRadius = 0.5;
-        float animation = fract(uFirstAnimation.y + uSecondAnimation.y);
+        float animation = fract(uAnimations[0].y + uAnimations[1].y);
         float parabola = 4.*animation*(1.-animation);
-        vec3 direction = direction1 * (1. - step(1.,uFirstAnimation.y))
-                       + direction2 * step(1.,uFirstAnimation.y);
+        vec3 direction = directions[0] * (1. - step(1.,uAnimations[0].y))
+                       + directions[1] * step(1.,uAnimations[0].y);
 
         // shift sphere when hit by stick
         vec3 shiftOnImpact = direction * parabola;
@@ -85,25 +98,10 @@ vec2 map(vec3 point,float time){
         sdfId = 1.;
     }
 
-    // first stick
-    {
-        float animation = uFirstAnimation.x;
-        vec3 direction = direction1;
-        vec3 stickStart = 5.*direction;
-        vec3 stickEnd = 5.*(1.-animation)*direction;
-        float distStick = sdStick(point,stickStart, stickEnd, 0.01,0.05).x;
+    // sticks
+    for(int i = 0; i < NUM_STICKS; i++) {
+        float distStick = sdUnion(point, directions[i], uAnimations[i].x);
         sdfId = distStick < distScene ? 2. : sdfId;
-        distScene = smin(distScene, distStick, uSminK);
-    }
-
-    // second stick
-    {
-        float animation = uSecondAnimation.x;
-        vec3 direction = direction2;
-        vec3 stickStart = 5.*direction;
-        vec3 stickEnd = 5.*(1.-animation)*direction;
-        float distStick = sdStick(point,stickStart, stickEnd, 0.01,0.05).x;
-        sdfId = distStick < distScene ? 3. : sdfId;
         distScene = smin(distScene, distStick, uSminK);
     }
 
